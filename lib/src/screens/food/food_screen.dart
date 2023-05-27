@@ -2,14 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/models/category_model.dart';
+import 'package:mobx/mobx.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/restaurants_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/repositories/food/card_food.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/category_store.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/store/food_store.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/widgets/categories_food_navigator.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/restaurant_store.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/food_model.dart';
-import '../../widgets/bottom_navigator_user.dart';
+import '../../widgets/categories_food_navigator.dart';
 
 class FoodScreen extends StatefulWidget {
   const FoodScreen({super.key});
@@ -19,38 +22,40 @@ class FoodScreen extends StatefulWidget {
 }
 
 class _FoodScreenState extends State<FoodScreen> {
-  List<Category> listCategory = [
-    Category(id: 1, categoryName: 'Lanches', categoryDesc: 'categoryDesc'),
-    Category(id: 2, categoryName: 'Pizzas', categoryDesc: 'categoryDesc'),
-    Category(id: 3, categoryName: 'Pastéis', categoryDesc: 'categoryDesc'),
-    Category(id: 4, categoryName: 'Salgados', categoryDesc: 'categoryDesc'),
-    Category(
-        id: 1, categoryName: 'Comida Japonesa', categoryDesc: 'categoryDesc'),
-    Category(id: 5, categoryName: 'Comida Fit', categoryDesc: 'categoryDesc'),
-    Category(id: 6, categoryName: 'Caldos', categoryDesc: 'categoryDesc'),
-    Category(id: 7, categoryName: 'Churrasco', categoryDesc: 'categoryDesc'),
-    Category(id: 8, categoryName: 'Esfihas', categoryDesc: 'categoryDesc'),
-    Category(id: 9, categoryName: 'Marmitas', categoryDesc: 'categoryDesc'),
-    Category(id: 10, categoryName: 'Açaí', categoryDesc: 'categoryDesc'),
-    Category(id: 11, categoryName: 'Sorvetes', categoryDesc: 'categoryDesc'),
-    Category(id: 12, categoryName: 'Doces', categoryDesc: 'categoryDesc'),
-  ];
-
-  FoodStore storeFoods = new FoodStore();
   late Restaurant _restaurant;
+
+  late FoodStore storeFoods;
+  late CategoryStore storeCategories;
+  late RestaurantStore storeRestaurants;
+  late ReactionDisposer disposer;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    storeFoods = Provider.of<FoodStore>(context);
+    storeCategories = Provider.of<CategoryStore>(context);
+    storeRestaurants = Provider.of<RestaurantStore>(context);
+
     RouteSettings settings = ModalRoute.of(context)!.settings;
     _restaurant = (settings.arguments as Restaurant?)!;
 
-    storeFoods.getFoods(_restaurant.id);
+    disposer = reaction((_) => storeCategories.filtersCategory,
+        (filtersChanged) async {
+      if (storeCategories.isLoading && storeFoods.isLoading) {
+        await storeFoods.getFoods(_restaurant.uuid,
+            categoriesFilter: storeCategories.filtersCategory);
+      }
+    });
+
+    storeRestaurants.setRestaurant(_restaurant);
+    storeCategories.getCategories(_restaurant.uuid);
+    storeFoods.getFoods(_restaurant.uuid);
   }
 
   @override
   void dispose() {
+    disposer();
     super.dispose();
     //getFoods();
   }
@@ -63,19 +68,39 @@ class _FoodScreenState extends State<FoodScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
         // title: Text('${_restaurant.restaurantName}'),
-        title: Text(_restaurant.restaurantName),
+        title: Text(_restaurant.tenant_name),
         centerTitle: true,
       ),
-      body: _builCategoriesFood(),
-      bottomNavigationBar: BottomNavigatorUser(0),
+      body: _buildCategoriesFood(),
+      bottomNavigationBar: BottomNavigator(0),
     );
   }
 
-  Widget _builCategoriesFood() {
+  Widget _buildCategoriesFood() {
     //return const Text('foods');
     return Column(
       children: <Widget>[
-        CategoriesFood(listCategory),
+        Observer(
+          builder: (context) {
+            if (storeCategories.isLoading) {
+              return const CircularProgressIndicator();
+            } else {
+              if (storeCategories.categories.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "Não há categorias aqui.",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                );
+              } else {
+                return CategoriesFood(storeCategories.categories);
+              }
+            }
+          },
+        ),
         Observer(builder: (context) {
           return storeFoods.isLoading
               ? const CircularProgressIndicator()
@@ -112,12 +137,4 @@ class _FoodScreenState extends State<FoodScreen> {
       ),
     );
   }
-
-  /*void getFoods() async {
-    final foods = await FoodRepository().getFoods();
-
-    setState(() {
-      storeFoods.addAll(foods);
-    });
-  }*/
 }

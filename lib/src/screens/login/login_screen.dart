@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/screens/home/home_screen.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/screens/home/home_screen_tenant.dart';
 import '../../constants/custom_colors.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/screens/signup/signup_screen.dart';
 
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const HomeScreenTenant(),
                       ));
                 },
                 style: ButtonStyle(
@@ -274,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
+        builder: (context) => const HomeScreenTenant(),
       ),
     );
   }

@@ -2,95 +2,75 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/evaluation_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator_user.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
 
 import '../../models/order_model.dart';
 
 class OrderScreen extends StatelessWidget {
   List<Order> listOrders = [
     Order(
-      id: 1,
-      userId: 1,
-      foodId: 1,
-      stPaymentId: 1,
-      stOrderId: 1,
-      orderPrice: '14,90',
-      orderComment: 'Gostosão',
-      orderDate: '02/11/2022',
+      identify: 'awers3',
+      order_status: 'aguardando',
+      total: 599.90,
+      order_comment: 'Gostosão',
+      created_at: '02/11/2022',
       foods: [
         Food(
-            id: 1,
-            categoryId: 1,
-            restaurantId: 1,
-            foodName: 'X salada',
-            foodPrice: '14,99',
-            foodIngredients: 'Pão, queijo, presunto, salada e hamburguer')
+            identify: "1",
+            food_name: 'X salada',
+            price: '14,99',
+            food_desc: 'Pão, queijo, presunto, salada e hamburguer')
       ],
       evaluations: [
         Evaluation(id: 1, userId: 1, stars: 3, comment: 'Gostoso esse Lanche'),
       ],
     ),
     Order(
-      id: 1,
-      userId: 1,
-      foodId: 1,
-      stPaymentId: 1,
-      stOrderId: 1,
-      orderPrice: '599,90',
-      orderComment: 'Delicia',
-      orderDate: '01/11/2022',
+      identify: 'awers3',
+      order_status: 'aguardando',
+      total: 599.90,
+      order_comment: 'Gostosão',
+      created_at: '02/11/2022',
       foods: [
         Food(
-            id: 1,
-            categoryId: 1,
-            restaurantId: 1,
-            foodName: 'X salada',
-            foodPrice: '14,99',
-            foodIngredients: 'Pão, queijo, presunto, salada e hamburguer')
+            identify: "1",
+            food_name: 'X salada',
+            price: '14,99',
+            food_desc: 'Pão, queijo, presunto, salada e hamburguer')
       ],
       evaluations: [
         Evaluation(id: 1, userId: 1, stars: 3, comment: 'Gostoso esse Lanche'),
       ],
     ),
     Order(
-      id: 1,
-      userId: 1,
-      foodId: 1,
-      stPaymentId: 1,
-      stOrderId: 1,
-      orderPrice: '599,90',
-      orderComment: 'Gostosão',
-      orderDate: '02/11/2022',
+      identify: 'awers3',
+      order_status: 'aguardando',
+      total: 599.90,
+      order_comment: 'Gostosão',
+      created_at: '02/11/2022',
       foods: [
         Food(
-            id: 1,
-            categoryId: 1,
-            restaurantId: 1,
-            foodName: 'X salada',
-            foodPrice: '14,99',
-            foodIngredients: 'Pão, queijo, presunto, salada e hamburguer')
+            identify: "1",
+            food_name: 'X salada',
+            price: '14,99',
+            food_desc: 'Pão, queijo, presunto, salada e hamburguer')
       ],
       evaluations: [
         Evaluation(id: 1, userId: 1, stars: 3, comment: 'Gostoso esse Lanche'),
       ],
     ),
     Order(
-      id: 1,
-      userId: 1,
-      foodId: 1,
-      stPaymentId: 1,
-      stOrderId: 1,
-      orderPrice: '599,90',
-      orderComment: 'Delicia',
-      orderDate: '01/11/2022',
+      identify: 'awers3',
+      order_status: 'aguardando',
+      total: 599.90,
+      order_comment: 'Gostosão',
+      created_at: '02/11/2022',
       foods: [
         Food(
-            id: 1,
-            categoryId: 1,
-            restaurantId: 1,
-            foodName: 'X salada',
-            foodPrice: '14,99',
-            foodIngredients: 'Pão, queijo, presunto, salada e hamburguer')
+            identify: "1",
+            food_name: 'X salada',
+            price: '14,99',
+            food_desc: 'Pão, queijo, presunto, salada e hamburguer')
       ],
       evaluations: [
         Evaluation(id: 1, userId: 1, stars: 3, comment: 'Gostoso esse Lanche'),
@@ -107,7 +87,7 @@ class OrderScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
       ),
       body: _buildOrderScreen(context),
-      bottomNavigationBar: BottomNavigatorUser(2),
+      bottomNavigationBar: BottomNavigator(2),
     );
   }
 
@@ -148,13 +128,13 @@ class OrderScreen extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(
-          "Pedido #${order.id}",
+          "Pedido #${order.identify}",
           style: const TextStyle(
             color: Color.fromARGB(255, 180, 0, 0),
           ),
         ),
         subtitle: Text(
-          "Data #${order.orderDate}",
+          "Data #${order.created_at}",
           style: const TextStyle(color: Colors.black),
         ),
         trailing: const IconTheme(
@@ -164,8 +144,9 @@ class OrderScreen extends StatelessWidget {
           child: Icon(Icons.navigate_next),
         ),
         onTap: () {
-          print(order.id);
-          Navigator.pushNamed(context, '/order_details', arguments: order.id);
+          print(order.identify);
+          Navigator.pushNamed(context, '/order_details',
+              arguments: order.identify);
         },
       ),
     );

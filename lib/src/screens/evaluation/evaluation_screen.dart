@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator_user.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
 
 class EvaluationScreen extends StatelessWidget {
   const EvaluationScreen({super.key});
@@ -16,7 +16,7 @@ class EvaluationScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
       ),
       body: _buildEvaluationScreen(context),
-      bottomNavigationBar: BottomNavigatorUser(2),
+      bottomNavigationBar: BottomNavigator(2),
     );
   }
 

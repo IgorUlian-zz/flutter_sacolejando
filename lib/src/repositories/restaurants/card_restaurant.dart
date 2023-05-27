@@ -35,7 +35,7 @@ class RestauranteCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        restaurant.restaurantName,
+                        restaurant.tenant_name,
                         style: const TextStyle(
                           color: Color.fromARGB(255, 99, 99, 99),
                           fontWeight: FontWeight.bold,

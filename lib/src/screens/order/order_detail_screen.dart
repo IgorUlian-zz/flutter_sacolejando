@@ -5,26 +5,21 @@ import 'package:projeto_tcc_teste_sacolejando/src/models/evaluation_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/order_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/repositories/food/card_food.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator_user.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   Order _order = Order(
-    id: 1,
-    userId: 1,
-    foodId: 1,
-    stPaymentId: 1,
-    stOrderId: 1,
-    orderPrice: '599,90',
-    orderComment: 'Gostosão',
-    orderDate: '02/11/2022',
+    identify: 'awers3',
+    order_status: 'aguardando',
+    total: 599.90,
+    order_comment: 'Gostosão',
+    created_at: '02/11/2022',
     foods: [
       Food(
-          id: 1,
-          categoryId: 1,
-          restaurantId: 1,
-          foodName: 'X salada',
-          foodPrice: '14,99',
-          foodIngredients: 'Pão, queijo, presunto, salada e hamburguer')
+          identify: "1",
+          food_name: 'X salada',
+          price: '14,99',
+          food_desc: 'Pão, queijo, presunto, salada e hamburguer')
     ],
     evaluations: [],
   );
@@ -40,7 +35,7 @@ class OrderDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: _buildOrderDetails(context),
       ),
-      bottomNavigationBar: BottomNavigatorUser(2),
+      bottomNavigationBar: BottomNavigator(2),
     );
   }
 
@@ -50,12 +45,11 @@ class OrderDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _makeTextOrder('Numero do Pedido', _order.id.toString()),
-          _makeTextOrder('Data', _order.orderDate),
-          _makeTextOrder('Preço', _order.orderPrice),
-          _makeTextOrder('Status do Pagamento', _order.stPaymentId.toString()),
-          _makeTextOrder('Status do Pedido', _order.stOrderId.toString()),
-          _makeTextOrder('Comentário', _order.orderComment),
+          _makeTextOrder('Código do Pedido', _order.identify.toString()),
+          _makeTextOrder('Status', _order.order_status),
+          _makeTextOrder('Data', _order.created_at),
+          _makeTextOrder('Preço', _order.total.toString()),
+          _makeTextOrder('Comentário', _order.order_comment),
           Container(
             height: 30,
           ),

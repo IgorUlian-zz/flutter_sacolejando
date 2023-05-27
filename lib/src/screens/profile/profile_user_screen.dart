@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable, avoid_unnecessary_containers
 import 'package:flutter/material.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/user_options_model.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator_user.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
 
 class ProfileUserScreen extends StatelessWidget {
   List<UserOptions> listUserOptions = [
@@ -32,7 +32,7 @@ class ProfileUserScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
       ),
       body: _buildListUserProfile(context),
-      bottomNavigationBar: BottomNavigatorUser(3),
+      bottomNavigationBar: BottomNavigator(3),
     );
   }
 

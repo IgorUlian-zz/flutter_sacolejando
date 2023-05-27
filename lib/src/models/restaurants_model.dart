@@ -1,45 +1,33 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class Restaurant {
-  /*'user_id',
-        'profile_id',
-        'restaurants_cnpj',
-        'restaurant_name',
-        'restaurant_contact',*/
-  String id;
-  int userId;
-  int profileId;
-  String restaurantsCnpj;
-  String restaurantName;
-  String restaurantContact;
+  String uuid;
+  String tenant_cnpj;
+  String tenant_name;
+  //String tenant_contact;
+  //String tenant_image;
 
-  Restaurant(
-      {required this.id,
-      required this.userId,
-      required this.profileId,
-      required this.restaurantsCnpj,
-      required this.restaurantName,
-      required this.restaurantContact});
+  Restaurant({
+    required this.uuid,
+    required this.tenant_cnpj,
+    required this.tenant_name,
+  });
 
   factory Restaurant.fromJson(jsonData) {
     return Restaurant(
-      id: jsonData['id'].toString(),
-      userId: jsonData['user_id'],
-      profileId: jsonData['profile_id'],
-      restaurantsCnpj: jsonData['restaurants_cnpj'],
-      restaurantName: jsonData['restaurant_name'],
-      restaurantContact: jsonData['restaurant_contact'],
+      uuid: jsonData['uuid'],
+      tenant_cnpj: jsonData['tenant_cnpj'],
+      tenant_name: jsonData['tenant_name'],
     );
   }
 
   toJson() {
     return jsonEncode({
-      'id': id,
-      'user_id': userId,
-      'profile_id': profileId,
-      'restaurants_cnpj': restaurantsCnpj,
-      'restaurant_name': restaurantName,
-      'restaurant_contact': restaurantContact,
+      'uuid': uuid,
+      'tenant_cnpj': tenant_cnpj,
+      'tenant_name': tenant_name,
     });
   }
 }

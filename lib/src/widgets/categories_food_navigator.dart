@@ -2,14 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/category_model.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/category_store.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesFood extends StatelessWidget {
-  List<Category> listCategory;
+  final List<Category> _listCategory;
+  late CategoryStore storeCategory;
 
-  CategoriesFood(this.listCategory);
+  CategoriesFood(this._listCategory);
 
+  // ignore: empty_constructor_bodies
   @override
   Widget build(BuildContext context) {
+    storeCategory = Provider.of<CategoryStore>(context);
     return _buildCategories();
   }
 
@@ -19,9 +24,14 @@ class CategoriesFood extends StatelessWidget {
       height: 50,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: listCategory.length,
+        itemCount: _listCategory.length + 1,
         itemBuilder: (context, index) {
-          final Category category = listCategory[index];
+          if (index == 0) {
+            final Category category =
+                Category.fromJson({'uuid': 'all', 'category_name': 'Todas'});
+            return _buildCategory(category);
+          }
+          final Category category = _listCategory[index - 1];
           return _buildCategory(category);
         },
       ),
@@ -29,24 +39,26 @@ class CategoriesFood extends StatelessWidget {
   }
 
   Widget _buildCategory(Category category) {
-    return Container(
-      padding: const EdgeInsets.only(top: 2, bottom: 2, left: 20, right: 20),
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(
-            color: category.categoryName == 'Lanches'
-                ? Colors.black
-                : Colors.grey),
-      ),
-      child: Center(
-        child: Text(
-          category.categoryName,
-          style: TextStyle(
-              color: category.categoryName == 'Lanches'
-                  ? Colors.black
-                  : Colors.grey,
-              fontWeight: FontWeight.bold),
+    final String uuidCategory = category.uuid;
+    bool inFilter = storeCategory.inFilter(uuidCategory);
+    return GestureDetector(
+      onTap: () => inFilter
+          ? storeCategory.removeFilter(category.uuid)
+          : storeCategory.addFilter(category.uuid),
+      child: Container(
+        padding: const EdgeInsets.only(top: 2, bottom: 2, left: 20, right: 20),
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(color: inFilter ? Colors.black : Colors.grey),
+        ),
+        child: Center(
+          child: Text(
+            category.category_name,
+            style: TextStyle(
+                color: inFilter ? Colors.black : Colors.grey,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );

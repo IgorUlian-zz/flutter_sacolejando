@@ -1,39 +1,35 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class Food {
-  int id;
-  int categoryId;
-  int restaurantId;
-  String foodName;
-  String foodPrice;
-  String foodIngredients;
+  String identify;
+  String food_name;
+  String price;
+  String food_desc;
+  //String food_image;
 
-  Food(
-      {required this.id,
-      required this.categoryId,
-      required this.restaurantId,
-      required this.foodName,
-      required this.foodPrice,
-      required this.foodIngredients});
+  Food({
+    required this.identify,
+    required this.food_name,
+    required this.price,
+    required this.food_desc,
+  });
 
   factory Food.fromJson(jsonData) {
     return Food(
-      id: jsonData['id'],
-      categoryId: jsonData['category_id'],
-      restaurantId: jsonData['restaurant_id'],
-      foodName: jsonData['food_name'],
-      foodPrice: jsonData['food_price'],
-      foodIngredients: jsonData['food_ingredients'],
+      identify: jsonData['identify'],
+      food_name: jsonData['food_name'],
+      price: jsonData['price'].toString(),
+      food_desc: jsonData['food_desc'],
     );
   }
   toJson() {
     return jsonEncode({
-      'id': id,
-      'category_id': categoryId,
-      'restaurantId': restaurantId,
-      'foodName': foodName,
-      'foodPrice': foodPrice,
-      'foodIngredients': foodIngredients,
+      'identify': identify,
+      'food_name': food_name,
+      'price': price,
+      'food_desc': food_desc,
     });
   }
 }

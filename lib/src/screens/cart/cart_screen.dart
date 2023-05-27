@@ -1,20 +1,39 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print, must_be_immutable, unused_field, unnecessary_null_comparison, prefer_const_constructors
 import 'package:flutter/material.dart';
-import '../../widgets/bottom_navigator_user.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/food_store.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/order_store.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/restaurant_store.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+  late FoodStore _foodStore;
+  late RestaurantStore _restaurantStore;
+  late OrderStore _orderStore;
+  final TextEditingController _commentController = TextEditingController();
+
+  late String titleRestaurant = _restaurantStore.restaurant != null
+      ? "Carrinho - ${_restaurantStore.restaurant?.tenant_name}"
+      : "Carrinho";
+
+  CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    _foodStore = Provider.of<FoodStore>(context);
+    _restaurantStore = Provider.of<RestaurantStore>(context);
+    _orderStore = Provider.of<OrderStore>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
-        title: const Text('Carrinho'),
+        title: Text(titleRestaurant),
         centerTitle: true,
       ),
       body: _buildContentCart(context),
-      bottomNavigationBar: BottomNavigatorUser(1),
+      bottomNavigationBar: BottomNavigator(1),
     );
   }
 
@@ -32,26 +51,34 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: const EdgeInsets.only(top: 12, left: 12),
-      child: const Text(
-        "Total (6) Items",
-        style: TextStyle(color: Colors.black),
+    return Observer(
+      builder: (BuildContext context) => Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(top: 12, left: 12),
+        child: Text(
+          "Total (${_foodStore.cartItems.length})Items",
+          style: const TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
 
   Widget _buildCartList(context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      primary: false,
-      itemCount: 6,
-      itemBuilder: (context, index) => _buildCartItem(context),
+    return Observer(
+      builder: (context) => ListView.builder(
+        shrinkWrap: true,
+        primary: false,
+        itemCount: _foodStore.cartItems.length,
+        itemBuilder: (context, index) {
+          final Map<String, dynamic> itemCart = _foodStore.cartItems[index];
+          return _buildCartItem(itemCart, context);
+        },
+      ),
     );
   }
 
-  Widget _buildCartItem(context) {
+  Widget _buildCartItem(itemCart, context) {
+    final Food food = itemCart['food'];
     return Stack(
       children: <Widget>[
         Container(
@@ -71,7 +98,7 @@ class CartScreen extends StatelessWidget {
                     child: Image.asset('assets/acai_red.png'),
                   ),
                 ),
-                _showDetailItemCart(context),
+                _showDetailItemCart(food, itemCart, context),
               ],
             ),
           ),
@@ -96,7 +123,8 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _showDetailItemCart(context) {
+  Widget _showDetailItemCart(
+      Food food, Map<String, dynamic> itemCard, context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.only(top: 5, right: 4),
@@ -104,10 +132,10 @@ class CartScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Teste',
+            Text(
+              food.food_name,
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Color.fromARGB(255, 180, 0, 0),
               ),
@@ -116,9 +144,9 @@ class CartScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const Text(
-                    "R\$ 59,90",
-                    style: TextStyle(
+                  Text(
+                    "R\$ ${food.price}",
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Color.fromARGB(255, 180, 0, 0),
                     ),
@@ -126,24 +154,30 @@ class CartScreen extends StatelessWidget {
                   Container(
                     child: Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.remove,
-                          size: 24,
-                          color: Colors.grey.shade700,
+                        GestureDetector(
+                          onTap: () => _foodStore.decrementFoodCart(food),
+                          child: Icon(
+                            Icons.remove,
+                            size: 24,
+                            color: Colors.grey.shade700,
+                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.only(
                               top: 4, bottom: 4, left: 12, right: 12),
                           color: const Color.fromARGB(255, 180, 0, 0),
-                          child: const Text(
-                            '2',
-                            style: TextStyle(color: Colors.white),
+                          child: Text(
+                            itemCard['quantity'].toString(),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
-                        Icon(
-                          Icons.add,
-                          size: 24,
-                          color: Colors.grey.shade700,
+                        GestureDetector(
+                          onTap: () => _foodStore.incrementFoodCart(food),
+                          child: Icon(
+                            Icons.add,
+                            size: 24,
+                            color: Colors.grey.shade700,
+                          ),
                         ),
                       ],
                     ),
@@ -161,6 +195,7 @@ class CartScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       child: TextFormField(
+        controller: _commentController,
         autocorrect: true,
         style: const TextStyle(
           color: Color.fromARGB(255, 180, 0, 0),
@@ -192,14 +227,19 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildCheckout(context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 50),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        color: Colors.orange,
-      ),
-      child: ElevatedButton(
+    return Observer(
+      builder: (context) => ElevatedButton(
         onPressed: () {
+          _orderStore.isCreateOrder ? null : _createOrder(context);
+          _orderStore.isCreateOrder
+              ? Text('Fazendo pedido ...',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ))
+              : Text('Finalizar pedido',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ));
           print('checkout');
         },
         style: ButtonStyle(
@@ -219,13 +259,26 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildTextTotalCart() {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 26, bottom: 16),
-      child: const Text(
-        "Preço total: R\$ 759,90",
-        style: TextStyle(
-            color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+    return Observer(
+      builder: (context) => Container(
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 26, bottom: 16),
+        child: Text(
+          "Preço total: R\$ ${_foodStore.totalCart}",
+          style: const TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
+  }
+
+  Future _createOrder(context) async {
+    await _orderStore.createOrder(
+        _restaurantStore.restaurant!.uuid, _foodStore.cartItems,
+        order_comment: _commentController.text);
+
+    _foodStore.clearCart();
+    _commentController.text = '';
+
+    Navigator.pushReplacementNamed(context, '/order_user');
   }
 }

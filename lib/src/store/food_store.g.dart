@@ -25,6 +25,22 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  late final _$cartItemsAtom =
+      Atom(name: '_FoodStoreBase.cartItems', context: context);
+
+  @override
+  List<Map<String, dynamic>> get cartItems {
+    _$cartItemsAtom.reportRead();
+    return super.cartItems;
+  }
+
+  @override
+  set cartItems(List<Map<String, dynamic>> value) {
+    _$cartItemsAtom.reportWrite(value, super.cartItems, () {
+      super.cartItems = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: '_FoodStoreBase.isLoading', context: context);
 
@@ -41,12 +57,30 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  late final _$totalCartAtom =
+      Atom(name: '_FoodStoreBase.totalCart', context: context);
+
+  @override
+  double get totalCart {
+    _$totalCartAtom.reportRead();
+    return super.totalCart;
+  }
+
+  @override
+  set totalCart(double value) {
+    _$totalCartAtom.reportWrite(value, super.totalCart, () {
+      super.totalCart = value;
+    });
+  }
+
   late final _$getFoodsAsyncAction =
       AsyncAction('_FoodStoreBase.getFoods', context: context);
 
   @override
-  Future<dynamic> getFoods(String tokenCompany) {
-    return _$getFoodsAsyncAction.run(() => super.getFoods(tokenCompany));
+  Future<dynamic> getFoods(String tokenCompany,
+      {List<String>? categoriesFilter}) {
+    return _$getFoodsAsyncAction.run(
+        () => super.getFoods(tokenCompany, categoriesFilter: categoriesFilter));
   }
 
   late final _$_FoodStoreBaseActionController =
@@ -108,10 +142,89 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
+  void addFoodCart(Food food) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.addFoodCart');
+    try {
+      return super.addFoodCart(food);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeFoodCart(Food food) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.removeFoodCart');
+    try {
+      return super.removeFoodCart(food);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearCart() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.clearCart');
+    try {
+      return super.clearCart();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void incrementFoodCart(Food food) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.incrementFoodCart');
+    try {
+      return super.incrementFoodCart(food);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void decrementFoodCart(Food food) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.decrementFoodCart');
+    try {
+      return super.decrementFoodCart(food);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool inFoodCart(Food food) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.inFoodCart');
+    try {
+      return super.inFoodCart(food);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  double resultTotalCart() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.resultTotalCart');
+    try {
+      return super.resultTotalCart();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 listFoods: ${listFoods},
-isLoading: ${isLoading}
+cartItems: ${cartItems},
+isLoading: ${isLoading},
+totalCart: ${totalCart}
     ''';
   }
 }

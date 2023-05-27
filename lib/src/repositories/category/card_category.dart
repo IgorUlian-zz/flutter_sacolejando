@@ -1,15 +1,17 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
-  final int id;
-  final String categoryName;
-  final String categoryDesc;
+  final String uuid;
+  final String category_name;
+  final String category_desc;
 
   const CategoryCard({
     super.key,
-    required this.id,
-    required this.categoryName,
-    required this.categoryDesc,
+    required this.uuid,
+    required this.category_name,
+    required this.category_desc,
   });
 
   @override
@@ -41,7 +43,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      categoryName,
+                      category_name,
                       style: const TextStyle(
                         color: Color.fromARGB(255, 99, 99, 99),
                         fontWeight: FontWeight.bold,
