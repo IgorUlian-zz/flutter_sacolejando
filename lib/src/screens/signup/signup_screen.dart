@@ -1,203 +1,179 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_print
+// ignore_for_file: use_key_in_widget_constructors, must_be_immutable, unused_field, sort_child_properties_last, sized_box_for_whitespace, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/auth_store.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/logo_sacolejando.dart';
+import 'package:provider/provider.dart';
 
-import '../../constants/custom_colors.dart';
+class SignUpScreen extends StatelessWidget {
+  late double _deviceWidth;
+  late double _deviceHeight;
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  late AuthStore _authStore;
 
-  @override
-  State<SignUpScreen> createState() => visualization();
-}
-
-Color getColor(Set<MaterialState> states) {
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed,
-    MaterialState.hovered,
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Color.fromARGB(255, 180, 0, 0);
-  }
-  return Colors.white;
-}
-
-// ignore: camel_case_types
-class visualization extends State<SignUpScreen> {
-  // para a visualização da senha //
-  bool _obscuretext = true;
-
-  // text controllers para o banco
-  var controllerName = TextEditingController();
-  var controllerEmail = TextEditingController();
-  var controllerPassword = TextEditingController();
+  final TextEditingController _client_name = TextEditingController();
+  final TextEditingController _client_email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _authStore = Provider.of<AuthStore>(context);
+
+    _deviceWidth = MediaQuery.of(context).size.width;
+    _deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.symmetric(horizontal: 50),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 70,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: 30,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-
-              // PAGINA CADASTRO
-              Text(
-                "Cadastrando-se",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color.fromARGB(255, 145, 0, 0),
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Form(
-                child: Column(
-                  children: [
-                    //CADASTRO NOME DO CLIENTE
-                    TextFormField(
-                      autofocus: true,
-                      controller: controllerName,
-                      decoration: InputDecoration(
-                        labelText: "Nome Completo",
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
-                        prefixIcon: Icon(Icons.person,
-                            color: Color.fromARGB(255, 145, 0, 0)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                      ),
-                    ),
-
-                    // CADASTRO DE EMAIL
-                    TextFormField(
-                      controller: controllerEmail,
-                      decoration: InputDecoration(
-                        labelText: "E-mail",
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
-                        prefixIcon: Icon(Icons.mail_outline,
-                            color: Color.fromARGB(255, 145, 0, 0)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                      ),
-                    ),
-
-                    // CADASTRO DE SENHA
-                    TextFormField(
-                      controller: controllerPassword,
-                      decoration: InputDecoration(
-                        labelText: "Senha",
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
-                        prefixIcon: Icon(
-                          Icons.vpn_key_sharp,
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _obscuretext = !_obscuretext;
-                            });
-                          },
-                          child: Icon(_obscuretext
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                      ),
-                      obscureText: _obscuretext,
-                    ),
-
-                    // CONFIRMAÇÃO DE SENHA
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Confirme a Senha",
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
-                        prefixIcon: Icon(
-                          Icons.vpn_key_sharp,
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _obscuretext = !_obscuretext;
-                            });
-                          },
-                          child: Icon(_obscuretext
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                                color: Color.fromARGB(255, 145, 0, 0)))),
-                      ),
-                      obscureText: _obscuretext,
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                  ],
-                ),
-              ),
-
-              //BOTÃO CADASTRAR
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "Cadastrar",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      CustomColors().getActivePrimaryButton()),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Observer(
+          builder: (context) => _registerUI(context),
         ),
       ),
     );
+  }
+
+  Widget _registerUI(context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.10),
+      child: Column(
+        children: <Widget>[
+          Container(height: 50),
+          const LogoSacolejando(),
+          Container(height: 50),
+          _formLogin(context),
+          Container(height: 15),
+          _loginButton(context),
+          Container(height: 30),
+          _textRegister(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _formLogin(context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+                color: Color.fromRGBO(119, 119, 119, 0.6),
+                blurRadius: 20.0,
+                offset: Offset(0, 10))
+          ]),
+      child: Column(
+        children: <Widget>[
+          _nameTextField(context),
+          _emailTextField(context),
+          _passwordTextField(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _nameTextField(context) {
+    return TextFormField(
+      controller: _client_name,
+      autocorrect: false,
+      autofocus: true,
+      style: const TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      cursorColor: Theme.of(context).primaryColor,
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'Nome',
+        hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      ),
+    );
+  }
+
+  Widget _emailTextField(context) {
+    return TextFormField(
+      controller: _client_email,
+      autocorrect: false,
+      autofocus: false,
+      style: const TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      cursorColor: Theme.of(context).primaryColor,
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'E-mail',
+        hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      ),
+    );
+  }
+
+  Widget _passwordTextField(context) {
+    return TextFormField(
+      controller: _password,
+      autocorrect: false,
+      autofocus: true,
+      obscureText: true,
+      style: const TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      cursorColor: Theme.of(context).primaryColor,
+      decoration: const InputDecoration(
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+          ),
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          contentPadding: EdgeInsets.all(10),
+          hintText: 'Senha',
+          hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0))),
+    );
+  }
+
+  Widget _loginButton(context) {
+    return Container(
+      width: _deviceWidth,
+      child: MaterialButton(
+        onPressed: () => _authStore.isLoading ? null : register(context),
+        color: const Color.fromARGB(255, 145, 0, 0),
+        child: Text(
+          _authStore.isLoading ? 'Cadastrando...' : 'CADASTRAR',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+    );
+  }
+
+  Widget _textRegister(context) {
+    return GestureDetector(
+      onTap: () {
+        //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+        Navigator.pushReplacementNamed(context, '/login');
+      },
+      child: const Text(
+        'Já cadastro? Faça Login!',
+        style: TextStyle(color: Color.fromARGB(255, 145, 0, 0), fontSize: 18.2),
+      ),
+    );
+  }
+
+  Future register(context) async {
+    await _authStore
+        .register(_client_name.text, _client_email.text, _password.text)
+        .then(
+            (value) => Navigator.pushReplacementNamed(context, '/restaurant'));
   }
 }

@@ -8,7 +8,7 @@ class RestaurantStore = _RestaurantStoreBase with _$RestaurantStore;
 
 abstract class _RestaurantStoreBase with Store {
   @observable
-  late Restaurant? restaurant = null;
+  Restaurant? restaurant = null;
 
   @action
   void setRestaurant(Restaurant value) => restaurant = value;

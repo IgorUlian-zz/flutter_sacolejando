@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print, must_be_immutable, unused_field, unnecessary_null_comparison, prefer_const_constructors
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print, must_be_immutable, unused_field, unnecessary_null_comparison, prefer_const_constructors, use_key_in_widget_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
@@ -15,10 +15,8 @@ class CartScreen extends StatelessWidget {
   final TextEditingController _commentController = TextEditingController();
 
   late String titleRestaurant = _restaurantStore.restaurant != null
-      ? "Carrinho - ${_restaurantStore.restaurant?.tenant_name}"
+      ? "Carrinho - ${_restaurantStore.restaurant!.tenant_name}"
       : "Carrinho";
-
-  CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +75,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(itemCart, context) {
+  Widget _buildCartItem(Map<String, dynamic> itemCart, context) {
     final Food food = itemCart['food'];
     return Stack(
       children: <Widget>[
@@ -105,17 +103,20 @@ class CartScreen extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.topRight,
-          child: Container(
-            height: 24,
-            width: 24,
-            margin: const EdgeInsets.only(top: 2, right: 6),
-            decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            child: const Icon(
-              Icons.close,
-              size: 20,
-              color: Colors.white,
+          child: GestureDetector(
+            onTap: () => _foodStore.removeFoodCart(food),
+            child: Container(
+              height: 24,
+              width: 24,
+              margin: EdgeInsets.only(top: 2, right: 4),
+              decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(100))),
+              child: Icon(
+                Icons.close,
+                size: 20,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -227,31 +228,33 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildCheckout(context) {
-    return Observer(
-      builder: (context) => ElevatedButton(
-        onPressed: () {
-          _orderStore.isCreateOrder ? null : _createOrder(context);
-          _orderStore.isCreateOrder
-              ? Text('Fazendo pedido ...',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ))
-              : Text('Finalizar pedido',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ));
-          print('checkout');
-        },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
-          shape: MaterialStateProperty.all<OutlinedBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    return Container(
+      child: Observer(
+        builder: (context) => ElevatedButton(
+          onPressed: () {
+            _orderStore.isCreateOrder ? null : _createOrder(context);
+            _orderStore.isCreateOrder
+                ? Text('Fazendo pedido ...',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ))
+                : Text('Finalizar pedido',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ));
+            print('checkout');
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+            shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            ),
           ),
-        ),
-        child: const Text(
-          "Finalizar Pedido",
-          style: TextStyle(
-            color: Colors.white,
+          child: const Text(
+            "Finalizar Pedido",
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
       ),

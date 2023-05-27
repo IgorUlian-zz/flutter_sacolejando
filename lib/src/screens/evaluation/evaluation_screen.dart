@@ -1,21 +1,34 @@
-// ignore_for_file: avoid_unnecessary_containers, avoid_returning_null_for_void, avoid_print
+// ignore_for_file: avoid_unnecessary_containers, avoid_returning_null_for_void, avoid_print, use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/store/order_store.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
+import 'package:provider/provider.dart';
 
 class EvaluationScreen extends StatelessWidget {
-  const EvaluationScreen({super.key});
+  int stars = 1;
+  final TextEditingController _comment = TextEditingController();
+  late OrderStore _orderStore;
+
+  late String identifyOrder;
 
   @override
   Widget build(BuildContext context) {
+    _orderStore = Provider.of<OrderStore>(context);
+
+    RouteSettings settings = ModalRoute.of(context)!.settings;
+    identifyOrder = (settings.arguments as String);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Avaliar o Pedido'),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
       ),
-      body: _buildEvaluationScreen(context),
+      body: Observer(
+        builder: (context) => _buildEvaluationScreen(context),
+      ),
       bottomNavigationBar: BottomNavigator(2),
     );
   }
@@ -33,9 +46,9 @@ class EvaluationScreen extends StatelessWidget {
 
   Widget _buildHeader(context) {
     return Container(
-      child: const Text(
-        'Avaliar o Pedido',
-        style: TextStyle(
+      child: Text(
+        "Avaliar o Pedido: $identifyOrder",
+        style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
       ),
     );
@@ -46,7 +59,7 @@ class EvaluationScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           RatingBar.builder(
-            initialRating: 0,
+            initialRating: stars.toDouble(),
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: true,
@@ -58,10 +71,11 @@ class EvaluationScreen extends StatelessWidget {
               color: Colors.amber,
             ),
             onRatingUpdate: (value) {
-              print(value);
+              stars = value.toInt();
             },
           ),
           TextFormField(
+            controller: _comment,
             autocorrect: true,
             style: const TextStyle(
               color: Color.fromARGB(255, 180, 0, 0),
@@ -94,7 +108,7 @@ class EvaluationScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/order_evaluation');
+              makeEvaluationOrder(context);
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
@@ -114,5 +128,12 @@ class EvaluationScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future makeEvaluationOrder(context) async {
+    await _orderStore.evaluationOrder(identifyOrder, stars,
+        comment: _comment.text);
+
+    Navigator.pushReplacementNamed(context, '/order_user');
   }
 }

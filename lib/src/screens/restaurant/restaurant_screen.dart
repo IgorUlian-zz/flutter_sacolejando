@@ -1,19 +1,20 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/restaurants_model.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/repositories/restaurants/card_restaurant.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/repositories/restaurants/restaurant_repository.dart';
 
-class HomeScreenTenant extends StatefulWidget {
-  const HomeScreenTenant({super.key});
+import '../../widgets/bottom_navigator.dart';
+import '../../widgets/custom_circular_indicator.dart';
 
+class RestaurantScreen extends StatefulWidget {
   @override
-  State<HomeScreenTenant> createState() => _HomeScreenState();
+  State<RestaurantScreen> createState() => _RestaurantScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreenTenant> {
-  List<Restaurant> listRestaurant = [];
+class _RestaurantScreenState extends State<RestaurantScreen> {
+  final List<Restaurant> _restaurants = [];
   bool isLoading = false;
 
   @override
@@ -26,25 +27,26 @@ class _HomeScreenState extends State<HomeScreenTenant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 180, 0, 0),
-          // title: Text('${_restaurant.restaurantName}'),
-          title: const Text("Restaurantes"),
-          centerTitle: true,
-        ),
-        body: Container(
-          child: _buildRestaurants(
-            context,
-          ),
-        ));
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 180, 0, 0),
+        title: const Text("Restaurantes"),
+        centerTitle: true,
+      ),
+      body: isLoading
+          ? CustomCircularIndicator(
+              textLabel: 'Carregando ...',
+            )
+          : _buildRestaurants(context),
+      bottomNavigationBar: BottomNavigator(0),
+    );
   }
 
   Widget _buildRestaurants(context) {
     return Container(
       child: ListView.builder(
-        itemCount: listRestaurant.length,
+        itemCount: _restaurants.length,
         itemBuilder: (context, index) {
-          final Restaurant restaurant = listRestaurant[index];
+          final Restaurant restaurant = _restaurants[index];
 
           return RestauranteCard(
             restaurant: restaurant,
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreenTenant> {
     final restaurants = await RestaurantRepository().getRestaurants();
 
     setState(() {
-      listRestaurant.addAll(restaurants);
+      _restaurants.addAll(restaurants);
     });
     setState(() => isLoading = false);
   }

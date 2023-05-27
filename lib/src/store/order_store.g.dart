@@ -25,21 +25,98 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_OrderStoreBase.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  late final _$ordersAtom =
+      Atom(name: '_OrderStoreBase.orders', context: context);
+
+  @override
+  ObservableList<Order> get orders {
+    _$ordersAtom.reportRead();
+    return super.orders;
+  }
+
+  @override
+  set orders(ObservableList<Order> value) {
+    _$ordersAtom.reportWrite(value, super.orders, () {
+      super.orders = value;
+    });
+  }
+
   late final _$createOrderAsyncAction =
       AsyncAction('_OrderStoreBase.createOrder', context: context);
 
   @override
   Future<dynamic> createOrder(
       String tokenCompany, List<Map<String, dynamic>> foods,
-      {String? order_comment}) {
+      {required String order_comment}) {
     return _$createOrderAsyncAction.run(() =>
         super.createOrder(tokenCompany, foods, order_comment: order_comment));
+  }
+
+  late final _$getMyOrdersAsyncAction =
+      AsyncAction('_OrderStoreBase.getMyOrders', context: context);
+
+  @override
+  Future<dynamic> getMyOrders() {
+    return _$getMyOrdersAsyncAction.run(() => super.getMyOrders());
+  }
+
+  late final _$evaluationOrderAsyncAction =
+      AsyncAction('_OrderStoreBase.evaluationOrder', context: context);
+
+  @override
+  Future<dynamic> evaluationOrder(String identifyOrder, int stars,
+      {required String comment}) {
+    return _$evaluationOrderAsyncAction.run(
+        () => super.evaluationOrder(identifyOrder, stars, comment: comment));
+  }
+
+  late final _$_OrderStoreBaseActionController =
+      ActionController(name: '_OrderStoreBase', context: context);
+
+  @override
+  void addOrder(Order order) {
+    final _$actionInfo = _$_OrderStoreBaseActionController.startAction(
+        name: '_OrderStoreBase.addOrder');
+    try {
+      return super.addOrder(order);
+    } finally {
+      _$_OrderStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearOrder() {
+    final _$actionInfo = _$_OrderStoreBaseActionController.startAction(
+        name: '_OrderStoreBase.clearOrder');
+    try {
+      return super.clearOrder();
+    } finally {
+      _$_OrderStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
   String toString() {
     return '''
-isCreateOrder: ${isCreateOrder}
+isCreateOrder: ${isCreateOrder},
+isLoading: ${isLoading},
+orders: ${orders}
     ''';
   }
 }

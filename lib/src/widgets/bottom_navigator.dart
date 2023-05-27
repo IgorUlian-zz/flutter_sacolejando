@@ -14,7 +14,7 @@ class BottomNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
-        animationDuration: const Duration(milliseconds: 200),
+        animationDuration: const Duration(milliseconds: 150),
         backgroundColor: Colors.white,
         color: const Color.fromARGB(255, 180, 0, 0),
         height: 45,
@@ -37,7 +37,7 @@ class BottomNavigator extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.pushReplacementNamed(context, '/restaurant');
               break;
             case 1:
               Navigator.pushReplacementNamed(context, '/cart');
@@ -49,7 +49,7 @@ class BottomNavigator extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/user_profile');
               break;
             default:
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.pushReplacementNamed(context, '/restaurant');
           }
         });
   }

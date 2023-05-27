@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, unnecessary_string_interpolations, unnecessary_new
+// ignore_for_file: sized_box_for_whitespace, unnecessary_string_interpolations, unnecessary_new, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,14 +9,13 @@ import 'package:projeto_tcc_teste_sacolejando/src/store/category_store.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/store/food_store.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/store/restaurant_store.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/widgets/bottom_navigator.dart';
+import 'package:projeto_tcc_teste_sacolejando/src/widgets/custom_circular_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/food_model.dart';
 import '../../widgets/categories_food_navigator.dart';
 
 class FoodScreen extends StatefulWidget {
-  const FoodScreen({super.key});
-
   @override
   State<FoodScreen> createState() => _FoodScreenState();
 }
@@ -83,7 +82,9 @@ class _FoodScreenState extends State<FoodScreen> {
         Observer(
           builder: (context) {
             if (storeCategories.isLoading) {
-              return const CircularProgressIndicator();
+              return CustomCircularIndicator(
+                textLabel: 'Carregando ...',
+              );
             } else {
               if (storeCategories.categories.isEmpty) {
                 return const Center(
@@ -103,7 +104,9 @@ class _FoodScreenState extends State<FoodScreen> {
         ),
         Observer(builder: (context) {
           return storeFoods.isLoading
-              ? const CircularProgressIndicator()
+              ? CustomCircularIndicator(
+                  textLabel: 'Carregando ...',
+                )
               : storeFoods.listFoods.isEmpty
                   ? const Center(
                       child: Text(

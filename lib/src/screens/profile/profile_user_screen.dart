@@ -19,6 +19,9 @@ class ProfileUserScreen extends StatelessWidget {
         description:
             'Aqui você pode ver informações para trabalhar no Sacolejando.'),
     UserOptions(
+        name: 'Deseja sair do App do Sacolejando ?',
+        description: 'Aqui você nos deixa triste com sua saída.'),
+    UserOptions(
         name: 'Ajuda',
         description: 'Aqui você pode pedir ajuda aos Universitários'),
   ];
@@ -64,6 +67,9 @@ class ProfileUserScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/login');
               } else if (userOptions.name == 'Trabalhe Conosco') {
                 Navigator.pushNamed(context, '/category');
+              } else if (userOptions.name ==
+                  'Deseja sair do App do Sacolejando ?') {
+                Navigator.pushReplacementNamed(context, '/logout');
               } else {
                 Navigator.pushNamed(context, '/home');
               }

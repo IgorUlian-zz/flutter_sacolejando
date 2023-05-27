@@ -1,281 +1,169 @@
+// ignore_for_file: unused_field, sized_box_for_whitespace, sort_child_properties_last, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/screens/home/home_screen_tenant.dart';
-import '../../constants/custom_colors.dart';
-import 'package:projeto_tcc_teste_sacolejando/src/screens/signup/signup_screen.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+import '../../store/auth_store.dart';
+import '../../widgets/logo_sacolejando.dart';
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
+// ignore: must_be_immutable
+class LoginScreen extends StatelessWidget {
+  late double _deviceWidth;
+  late double _deviceHeight;
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool connected = false;
-  bool isLoggedIn = false;
-  final controllerEmail = TextEditingController();
-  final controllerPassword = TextEditingController();
+  late AuthStore _authStore;
+  final TextEditingController _client_email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return const Color.fromARGB(255, 180, 0, 0);
-    }
-    return const Color.fromARGB(255, 145, 0, 0);
-  }
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const Text(
-      "Login",
-      style: TextStyle(
-        color: Colors.white,
-      ),
-    );
+    _authStore = Provider.of<AuthStore>(context);
+
+    _deviceWidth = MediaQuery.of(context).size.width;
+    _deviceHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.symmetric(horizontal: 50),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Image.asset(
-                "assets/logo-sacolejando-atualizado1.png",
-                height: 220,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(
-                  bottom: 30,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: controllerEmail,
-                      enabled: !isLoggedIn,
-                      validator: (value) {
-                        if (value!.length > 6) {
-                          return "Esse e-mail parece muito pequeno";
-                        } else if (!value.contains("@")) {
-                          return "Acho que está faltando algo nesse e-mail";
-                        }
-                        return null;
-                      },
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        labelText: "E-mail",
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.mail_outline,
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ))),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: controllerPassword,
-                      enabled: !isLoggedIn,
-                      validator: (value) {
-                        if (value!.length > 6) {
-                          return "A senha precisa de pelo menos 6 caracteres.";
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Senha",
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.vpn_key_sharp,
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: (BorderSide(
-                          color: Color.fromARGB(255, 145, 0, 0),
-                        ))),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              GestureDetector(
-                child: const Text(
-                  "Esqueceu a senha?",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 145, 0, 0),
-                    fontSize: 12,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                      checkColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith(getColor),
-                      value: connected,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          connected = value!;
-                        });
-                      }),
-                  const Text(
-                    "Manter conectado?",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 145, 0, 0),
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreenTenant(),
-                      ));
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      CustomColors().getActivePrimaryButton()),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: Divider(
-                  color: Color.fromARGB(255, 145, 0, 0),
-                ),
-              ),
-              const Text(
-                "Ainda não tem uma conta?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color.fromARGB(255, 145, 0, 0),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpScreen(),
-                      ));
-                },
-                // ignore: sort_child_properties_last
-                child: const Text(
-                  "Cadastre-se",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 145, 0, 0),
-                  ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      CustomColors().getActiveSecundaryButton()),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-              ),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Observer(
+          builder: (context) => _loginPageUI(context),
         ),
       ),
     );
   }
 
-  void showSuccess(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Sucesso!"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void showError(String errorMessage) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Algo deu Errado!"),
-          content: Text(errorMessage),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void openHomeScreenUser() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomeScreenTenant(),
+  Widget _loginPageUI(context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.10),
+      child: Column(
+        children: <Widget>[
+          Container(height: 50),
+          const LogoSacolejando(),
+          Container(height: 50),
+          _formLogin(context),
+          Container(height: 15),
+          _loginButton(context),
+          Container(height: 30),
+          _textRegister(context),
+        ],
       ),
     );
+  }
+
+  Widget _formLogin(context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+                color: Color.fromRGBO(119, 119, 119, 0.6),
+                blurRadius: 10.0,
+                offset: Offset(0, 5))
+          ]),
+      child: Column(
+        children: <Widget>[
+          _emailTextField(context),
+          _passwordTextField(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _emailTextField(context) {
+    return TextFormField(
+      controller: _client_email,
+      autocorrect: false,
+      autofocus: true,
+      style: const TextStyle(
+        color: Color.fromARGB(255, 145, 0, 0),
+      ),
+      cursorColor: const Color.fromARGB(255, 145, 0, 0),
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 145, 0, 0),
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 145, 0, 0),
+          ),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'E-mail',
+        hintStyle: TextStyle(
+          color: Color.fromARGB(255, 145, 0, 0),
+        ),
+      ),
+    );
+  }
+
+  Widget _passwordTextField(context) {
+    return TextFormField(
+      controller: _password,
+      autocorrect: false,
+      autofocus: true,
+      obscureText: true,
+      style: const TextStyle(
+        color: Color.fromARGB(255, 145, 0, 0),
+      ),
+      cursorColor: const Color.fromARGB(255, 145, 0, 0),
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 145, 0, 0),
+          ),
+        ),
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'Senha',
+        hintStyle: TextStyle(
+          color: Color.fromARGB(255, 145, 0, 0),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginButton(context) {
+    return Container(
+      width: _deviceWidth,
+      child: MaterialButton(
+        onPressed: () => _authStore.isLoading ? null : auth(context),
+        color: const Color.fromARGB(255, 145, 0, 0),
+        child: Text(
+          _authStore.isLoading ? 'Autenticando...' : 'LOGIN',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+    );
+  }
+
+  Widget _textRegister(context) {
+    return GestureDetector(
+      onTap: () {
+        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen()));
+        Navigator.pushReplacementNamed(context, '/registrar');
+      },
+      child: const Text(
+        'Cadastre-se',
+        style: TextStyle(color: Color.fromARGB(255, 145, 0, 0), fontSize: 18.2),
+      ),
+    );
+  }
+
+  Future auth(context) async {
+    await _authStore.auth(_client_email.text, _password.text).then(
+        (value) => Navigator.pushReplacementNamed(context, '/restaurant'));
   }
 }
