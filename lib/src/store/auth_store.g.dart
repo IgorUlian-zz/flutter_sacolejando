@@ -53,10 +53,10 @@ mixin _$AuthStore on _AuthStoreBase, Store {
       AsyncAction('_AuthStoreBase.register', context: context);
 
   @override
-  Future<dynamic> register(
-      String client_name, String client_email, String password) {
-    return _$registerAsyncAction
-        .run(() => super.register(client_name, client_email, password));
+  Future<dynamic> register(String client_name, String client_email,
+      String password, String contact) {
+    return _$registerAsyncAction.run(
+        () => super.register(client_name, client_email, password, contact));
   }
 
   late final _$getMeAsyncAction =

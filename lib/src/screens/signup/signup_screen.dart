@@ -15,6 +15,7 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController _client_name = TextEditingController();
   final TextEditingController _client_email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _contact = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +68,7 @@ class SignUpScreen extends StatelessWidget {
           _nameTextField(context),
           _emailTextField(context),
           _passwordTextField(context),
+          _contactTextField(context),
         ],
       ),
     );
@@ -124,19 +126,48 @@ class SignUpScreen extends StatelessWidget {
     return TextFormField(
       controller: _password,
       autocorrect: false,
-      autofocus: true,
+      autofocus: false,
       obscureText: true,
       style: const TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
       cursorColor: Theme.of(context).primaryColor,
       decoration: const InputDecoration(
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
-          ),
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          contentPadding: EdgeInsets.all(10),
-          hintText: 'Senha',
-          hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0))),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'Senha',
+        hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      ),
+    );
+  }
+
+  Widget _contactTextField(context) {
+    return TextFormField(
+      controller: _contact,
+      autocorrect: false,
+      autofocus: false,
+      style: const TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      cursorColor: Theme.of(context).primaryColor,
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color.fromARGB(255, 145, 0, 0)),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        hintText: 'Contato',
+        hintStyle: TextStyle(color: Color.fromARGB(255, 145, 0, 0)),
+      ),
     );
   }
 
@@ -164,7 +195,7 @@ class SignUpScreen extends StatelessWidget {
         Navigator.pushReplacementNamed(context, '/login');
       },
       child: const Text(
-        'Já cadastro? Faça Login!',
+        'Já cadastrado? Faça Login!',
         style: TextStyle(color: Color.fromARGB(255, 145, 0, 0), fontSize: 18.2),
       ),
     );
@@ -172,7 +203,8 @@ class SignUpScreen extends StatelessWidget {
 
   Future register(context) async {
     await _authStore
-        .register(_client_name.text, _client_email.text, _password.text)
+        .register(_client_name.text, _client_email.text, _password.text,
+            _contact.text)
         .then(
             (value) => Navigator.pushReplacementNamed(context, '/restaurant'));
   }

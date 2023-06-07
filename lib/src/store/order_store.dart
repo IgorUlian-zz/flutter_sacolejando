@@ -22,11 +22,12 @@ abstract class _OrderStoreBase with Store {
   ObservableList<Order> orders = ObservableList<Order>();
 
   @action
-  Future createOrder(String tokenCompany, List<Map<String, dynamic>> foods,
-      {required String order_comment}) async {
+  Future createOrder(
+      String tokenCompany, List<Map<String, dynamic>> foods, String adress, String payment,
+      {required String comments}) async {
     isCreateOrder = true;
-    await _orderRepository.createOrder(tokenCompany, foods,
-        order_comment: order_comment);
+    await _orderRepository.createOrder(
+        tokenCompany, foods, comments: comments, adress, payment);
     isCreateOrder = false;
   }
 

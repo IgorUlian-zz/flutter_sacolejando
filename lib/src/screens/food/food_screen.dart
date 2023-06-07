@@ -66,7 +66,6 @@ class _FoodScreenState extends State<FoodScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 180, 0, 0),
-        // title: Text('${_restaurant.restaurantName}'),
         title: Text(_restaurant.tenant_name),
         centerTitle: true,
       ),
@@ -134,7 +133,6 @@ class _FoodScreenState extends State<FoodScreen> {
 
           return FoodCard(
             food: food,
-            notShowIconCart: false,
           );
         },
       ),

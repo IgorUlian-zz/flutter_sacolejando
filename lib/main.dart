@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           '/login': (context) => LoginScreen(),
           '/restaurant': (context) => RestaurantScreen(),
           '/food': (context) => FoodScreen(),
-          '/cart': (context) => CartScreen(),
+          '/cart': (context) => const CartScreen(),
           '/order_user': (context) => OrderScreen(),
           '/order_details': (context) => OrderDetailScreen(),
           '/order_evaluation': (context) => EvaluationScreen(),

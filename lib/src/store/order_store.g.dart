@@ -61,11 +61,11 @@ mixin _$OrderStore on _OrderStoreBase, Store {
       AsyncAction('_OrderStoreBase.createOrder', context: context);
 
   @override
-  Future<dynamic> createOrder(
-      String tokenCompany, List<Map<String, dynamic>> foods,
-      {required String order_comment}) {
-    return _$createOrderAsyncAction.run(() =>
-        super.createOrder(tokenCompany, foods, order_comment: order_comment));
+  Future<dynamic> createOrder(String tokenCompany,
+      List<Map<String, dynamic>> foods, String adress, String payment,
+      {required String comments}) {
+    return _$createOrderAsyncAction.run(() => super
+        .createOrder(tokenCompany, foods, adress, payment, comments: comments));
   }
 
   late final _$getMyOrdersAsyncAction =

@@ -24,12 +24,13 @@ class AuthRepository {
     return response;
   }
 
-  Future register(
-      String client_name, String client_email, String password) async {
+  Future register(String client_name, String client_email, String password,
+      String contact) async {
     final response = await _dio.post('/auth/register', data: {
       'client_name': client_name,
       'client_email': client_email,
       'password': password,
+      'contact': contact,
     });
 
     return response;

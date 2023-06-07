@@ -29,8 +29,7 @@ class RestauranteCard extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(40.0),
-                        child: Image.asset('assets/acai_red.png'),
+                        child: Image.asset('assets/logo_padrao_rest.png'),
                       ),
                     ),
                     Expanded(

@@ -11,13 +11,16 @@ class OrderRepository {
   }
 
   Future createOrder(String tokenCompany, List<Map<String, dynamic>> foods,
-      {required String order_comment}) async {
-    final response = await _httpClient.post("/auth/$API_VERSION/orders",
-        formData: {
-          'token_company': tokenCompany,
-          'foods': foods,
-          'order_comment': order_comment
-        });
+      String adress, String payment,
+      {required String comments}) async {
+    final response =
+        await _httpClient.post("/auth/$API_VERSION/orders", formData: {
+      'token_company': tokenCompany,
+      'foods': foods,
+      'comments': comments,
+      'adress': adress,
+      'payment': payment,
+    });
 
     return response;
   }

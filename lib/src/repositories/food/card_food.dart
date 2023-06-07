@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
+// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
@@ -44,9 +44,25 @@ class FoodCard extends StatelessWidget {
 
   Widget _buildImageFood() {
     return Container(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40.0),
-        child: Image.asset('assets/acai_red.png'),
+      width: 80,
+      height: 80,
+      margin: EdgeInsets.only(right: 8),
+      child: ClipOval(
+        child: Image.asset('assets/logo_padrao_rest.png'),
+        /* child: CachedNetworkImage(
+          imageUrl:
+              food.image != '' ? food.image : 'assets/logo_padrao_rest.png',
+          placeholder: (context, url) => Container(
+            height: 80,
+            width: 80,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          errorWidget: (context, url, error) => Center(
+            child: Icon(Icons.error),
+          ),
+        ),*/
       ),
     );
   }
@@ -71,7 +87,7 @@ class FoodCard extends StatelessWidget {
             height: 5,
           ),
           Text(
-            food.food_desc,
+            food.ingredients,
             style: const TextStyle(
                 color: Colors.black45,
                 fontSize: 12,

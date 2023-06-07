@@ -40,11 +40,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _makeTextOrder('Código do Pedido', _order.identify),
-          _makeTextOrder('Status', _order.status.toString()),
+          _makeTextOrder('Status', _order.status),
           _makeTextOrder('Data', _order.date),
+          _makeTextOrder('Endereço', _order.adress),
+          _makeTextOrder('Pagamento', _order.payment.toString()),
           _makeTextOrder('Preço', _order.total.toString()),
-          _order.order_comment != null
-              ? _makeTextOrder('Comentário', _order.order_comment.toString())
+          _order.comments != null
+              ? _makeTextOrder('Comentário', _order.comments)
               : Container(),
           Container(
             height: 30,

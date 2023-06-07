@@ -7,19 +7,23 @@ import 'package:projeto_tcc_teste_sacolejando/src/models/food_model.dart';
 
 class Order {
   String identify;
-  String order_comment;
+  String comments;
   String status;
   double total;
   String date;
+  String adress;
+  String payment;
   List<Food> foods;
   List<Evaluation> evaluations;
 
   Order({
     required this.identify,
-    required this.order_comment,
+    required this.comments,
+    required this.adress,
     required this.status,
     required this.total,
     required this.date,
+    required this.payment,
     required this.foods,
     required this.evaluations,
   });
@@ -36,7 +40,9 @@ class Order {
     return Order(
       identify: jsonData['identify'],
       status: jsonData['status'],
-      order_comment: jsonData['order_comment'].toString(),
+      adress: jsonData['adress'],
+      comments: jsonData['comments'],
+      payment: jsonData['payment'],
       total: double.parse(jsonData['total'].toString()),
       date: jsonData['date'],
       foods: _foodsApi,
@@ -47,7 +53,9 @@ class Order {
     return jsonEncode({
       'identify': identify,
       'status': status,
-      'order_comment': order_comment,
+      'adress': adress,
+      'payment': payment,
+      'comments': comments,
       'total': total,
       'date': date,
       'foods': foods,
